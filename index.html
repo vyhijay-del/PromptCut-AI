@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+<meta name="theme-color" content="#0a0a0a" />
+<title>BeatCut Studio — Auto Music Video Editor</title>
+<link rel="icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="12" fill="%230a0a0a"/><text x="32" y="44" font-family="Arial Black" font-size="40" font-weight="900" text-anchor="middle" fill="%23d4af37">B</text></svg>' />
+<style>
+  :root{
+    --bg:#0a0a0a;
+    --bg-2:#121212;
+    --bg-3:#1a1a1a;
+    --gold:#d4af37;
+    --gold-2:#f4d03f;
+    --gold-dim:#8a7023;
+    --text:#f0f0f0;
+    --text-dim:#9a9a9a;
+    --border:#2a2a2a;
+    --danger:#e74c3c;
+    --ok:#2ecc71;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overflow-x:hidden}
+  body{min-height:100vh;padding-bottom:80px}
+  button{font-family:inherit;cursor:pointer;border:none;outline:none}
+  input,select{font-family:inherit;outline:none}
+  ::-webkit-scrollbar{width:6px;height:6px}
+  ::-webkit-scrollbar-track{background:var(--bg-2)}
+  ::-webkit-scrollbar-thumb{background:var(--gold-dim);border-radius:3px}
+
+  /* HEADER */
+  header{
+    position:sticky;top:0;z-index:50;
+    background:linear-gradient(180deg,#0a0a0a 0%,#0a0a0aee 100%);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--border);
+    padding:10px 14px;
+    display:flex;align-items:center;gap:10px;
+  }
+  .logo-wrap{display:flex;align-items:center;gap:10px}
+  .logo-wrap svg{width:40px;height:40px;flex-shrink:0}
+  .brand-name{font-weight:900;letter-spacing:2px;font-size:15px;background:linear-gradient(90deg,var(--gold),var(--gold-2),var(--gold));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .brand-sub{font-size:10px;color:var(--text-dim);letter-spacing:1px}
+
+  /* LAYOUT */
+  .container{padding:12px;max-width:900px;margin:0 auto}
+  .card{
+    background:var(--bg-2);
+    border:1px solid var(--border);
+    border-radius:14px;
+    padding:14px;
+    margin-bottom:14px;
+    box-shadow:0 4px 20px rgba(0,0,0,.4);
+  }
+  .card h2{
+    margin:0 0 12px 0;font-size:15px;letter-spacing:1.5px;
+    color:var(--gold);text-transform:uppercase;font-weight:800;
+    display:flex;align-items:center;gap:8px;
+  }
+  .card h2::before{content:"";width:4px;height:16px;background:linear-gradient(180deg,var(--gold),var(--gold-dim));border-radius:2px}
+
+  /* BUTTONS */
+  .btn{
+    background:linear-gradient(135deg,var(--gold) 0%,var(--gold-dim) 100%);
+    color:#000;font-weight:700;letter-spacing:.5px;
+    padding:12px 18px;border-radius:10px;font-size:14px;
+    transition:transform .1s,box-shadow .2s;
+    display:inline-flex;align-items:center;justify-content:center;gap:8px;
+    min-height:44px;
+  }
+  .btn:active{transform:scale(.97)}
+  .btn:disabled{opacity:.5;cursor:not-allowed}
+  .btn-ghost{background:transparent;border:1px solid var(--gold);color:var(--gold)}
+  .btn-danger{background:linear-gradient(135deg,#c0392b,#7b241c);color:#fff}
+  .btn-block{width:100%}
+  .btn-sm{padding:8px 12px;font-size:12px;min-height:36px}
+
+  /* INPUTS */
+  .input,.select{
+    width:100%;background:var(--bg-3);border:1px solid var(--border);
+    color:var(--text);padding:12px;border-radius:10px;font-size:14px;
+  }
+  .input:focus,.select:focus{border-color:var(--gold)}
+  label{display:block;font-size:12px;color:var(--text-dim);margin-bottom:6px;letter-spacing:.5px;text-transform:uppercase}
+
+  /* UPLOAD ZONE */
+  .upload-zone{
+    border:2px dashed var(--gold-dim);border-radius:12px;
+    padding:24px 14px;text-align:center;cursor:pointer;
+    background:var(--bg-3);transition:all .2s;
+  }
+  .upload-zone:hover,.upload-zone.drag{border-color:var(--gold);background:#1f1a0a}
+  .upload-zone .icon{font-size:32px;color:var(--gold);margin-bottom:8px}
+  .upload-zone .text{font-size:13px;color:var(--text-dim)}
+
+  /* TABS */
+  .tabs{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:12px}
+  .tab{
+    padding:10px 14px;background:var(--bg-3);border:1px solid var(--border);
+    border-radius:10px;color:var(--text-dim);font-size:12px;font-weight:700;
+    letter-spacing:1px;white-space:nowrap;min-height:40px;
+  }
+  .tab.active{background:linear-gradient(135deg,var(--gold),var(--gold-dim));color:#000;border-color:var(--gold)}
+
+  /* GRID */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:10px}
+  .stock-item{
+    background:var(--bg-3);border:1px solid var(--border);border-radius:10px;
+    overflow:hidden;position:relative;cursor:pointer;transition:transform .15s;
+  }
+  .stock-item:active{transform:scale(.97)}
+  .stock-item video,.stock-item img{width:100%;aspect-ratio:16/9;object-fit:cover;display:block;background:#000}
+  .stock-item .overlay{
+    position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    background:rgba(0,0,0,.5);opacity:0;transition:opacity .2s;
+  }
+  .stock-item:hover .overlay{opacity:1}
+  .stock-item .badge{position:absolute;top:6px;right:6px;background:var(--gold);color:#000;font-size:10px;padding:3px 6px;border-radius:4px;font-weight:700}
+
+  /* CLIPS LIST */
+  .clip-list{display:flex;flex-direction:column;gap:8px}
+  .clip-item{
+    display:flex;align-items:center;gap:10px;padding:8px;
+    background:var(--bg-3);border:1px solid var(--border);border-radius:10px;
+  }
+  .clip-item video{width:60px;height:60px;object-fit:cover;border-radius:6px;background:#000}
+  .clip-info{flex:1;min-width:0}
+  .clip-info .name{font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .clip-info .meta{font-size:11px;color:var(--text-dim)}
+  .clip-remove{background:var(--danger);color:#fff;width:32px;height:32px;border-radius:8px;font-size:16px}
+
+  /* PREVIEW */
+  .preview-wrap{
+    position:relative;background:#000;border-radius:12px;overflow:hidden;
+    aspect-ratio:9/16;max-height:60vh;margin:0 auto;
+    border:1px solid var(--border);
+  }
+  .preview-wrap canvas,.preview-wrap video{width:100%;height:100%;display:block}
+  .preview-overlay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--text-dim);font-size:13px;text-align:center;padding:20px;pointer-events:none}
+
+  /* TIMELINE */
+  .timeline{
+    background:var(--bg-3);border:1px solid var(--border);border-radius:10px;
+    padding:10px;overflow-x:auto;white-space:nowrap;min-height:70px;
+  }
+  .timeline-track{display:inline-flex;gap:2px;height:50px;align-items:stretch;min-width:100%}
+  .timeline-clip{
+    background:linear-gradient(135deg,var(--gold),var(--gold-dim));
+    border-radius:4px;min-width:20px;position:relative;
+    display:flex;align-items:center;justify-content:center;
+    color:#000;font-size:10px;font-weight:700;padding:0 4px;
+  }
+  .beat-marker{position:absolute;top:0;bottom:0;width:2px;background:var(--danger)}
+
+  /* WAVEFORM */
+  .waveform{width:100%;height:60px;background:var(--bg-3);border-radius:8px;display:block}
+
+  /* ANALYSIS */
+  .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+  .stat{background:var(--bg-3);padding:10px;border-radius:8px;border:1px solid var(--border)}
+  .stat .label{font-size:10px;color:var(--text-dim);text-transform:uppercase;letter-spacing:1px}
+  .stat .value{font-size:18px;font-weight:800;color:var(--gold);margin-top:4px}
+
+  /* PROGRESS */
+  .progress{height:8px;background:var(--bg-3);border-radius:4px;overflow:hidden;margin-top:8px}
+  .progress-bar{height:100%;background:linear-gradient(90deg,var(--gold),var(--gold-2));width:0%;transition:width .2s}
+
+  /* STATUS */
+  .status{padding:10px;border-radius:8px;font-size:13px;margin-top:10px;display:none}
+  .status.show{display:block}
+  .status.info{background:#0a2540;color:#5dade2;border:1px solid #1f4e79}
+  .status.ok{background:#0a3520;color:#58d68d;border:1px solid #1e6e43}
+  .status.err{background:#3a0a0a;color:#ec7063;border:1px solid #791f1f}
+  .status.warn{background:#3a2a0a;color:#f4d03f;border:1px solid #79591f}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:100;display:none;align-items:center;justify-content:center;padding:16px}
+  .modal-bg.show{display:flex}
+  .modal{background:var(--bg-2);border:1px solid var(--gold-dim);border-radius:14px;padding:18px;max-width:500px;width:100%;max-height:90vh;overflow-y:auto}
+  .modal h3{margin:0 0 12px 0;color:var(--gold);font-size:16px}
+
+  /* RESPONSIVE */
+  @media (min-width:700px){
+    .stats{grid-template-columns:repeat(4,1fr)}
+    .grid{grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+  }
+  .row{display:flex;gap:8px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:120px}
+  .hidden{display:none!important}
+  .small{font-size:11px;color:var(--text-dim);margin-top:6px;line-height:1.5}
+  .chip{display:inline-block;padding:4px 8px;background:var(--bg-3);border:1px solid var(--border);border-radius:20px;font-size:11px;color:var(--text-dim);margin-right:4px}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-wrap">
+    <!-- INLINE SVG LOGO -->
+    <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-label="BeatCut Studio Logo">
+      <defs>
+        <linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0%" stop-color="#f4d03f"/>
+          <stop offset="50%" stop-color="#d4af37"/>
+          <stop offset="100%" stop-color="#8a7023"/>
+        </linearGradient>
+      </defs>
+      <rect width="100" height="100" rx="18" fill="#0a0a0a" stroke="url(#goldGrad)" stroke-width="2"/>
+      <!-- Golden B -->
+      <text x="30" y="62" font-family="Arial Black, sans-serif" font-size="52" font-weight="900" fill="url(#goldGrad)">B</text>
+      <!-- Waveform + play -->
+      <g stroke="url(#goldGrad)" stroke-width="2.5" stroke-linecap="round" fill="none">
+        <line x1="55" y1="55" x2="55" y2="45"/>
+        <line x1="60" y1="60" x2="60" y2="40"/>
+        <line x1="65" y1="65" x2="65" y2="35"/>
+        <line x1="70" y1="58" x2="70" y2="42"/>
+        <line x1="75" y1="52" x2="75" y2="48"/>
+        <line x1="80" y1="56" x2="80" y2="44"/>
+        <line x1="85" y1="53" x2="85" y2="47"/>
+      </g>
+      <!-- Play triangle -->
+      <polygon points="62,72 62,84 74,78" fill="url(#goldGrad)"/>
+    </svg>
+    <div>
+      <div class="brand-name">BEATCUT STUDIO</div>
+      <div class="brand-sub">AUTO MUSIC VIDEO EDITOR</div>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+
+  <!-- STEP 1: AUDIO -->
+  <div class="card">
+    <h2>1 · Upload Music</h2>
+    <div class="upload-zone" id="audioZone">
+      <div class="icon">🎵</div>
+      <div class="text"><b>Tap to upload audio</b><br/>MP3, WAV, M4A, OGG</div>
+      <input type="file" id="audioInput" accept="audio/*" style="display:none"/>
+    </div>
+    <div id="audioInfo" class="hidden" style="margin-top:10px">
+      <div style="display:flex;align-items:center;gap:10px">
+        <span style="font-size:24px">🎧</span>
+        <div style="flex:1;min-width:0">
+          <div id="audioName" style="font-weight:600;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+          <div id="audioMeta" style="font-size:11px;color:var(--text-dim)"></div>
+        </div>
+        <button class="btn btn-sm btn-ghost" id="audioRemove">✕</button>
+      </div>
+      <canvas class="waveform" id="waveform" style="margin-top:10px"></canvas>
+      <audio id="audioPlayer" controls style="width:100%;margin-top:8px"></audio>
+    </div>
+    <button class="btn btn-block" id="analyzeBtn" style="margin-top:10px" disabled>🔍 Analyze Beats</button>
+    <div id="analysisStatus" class="status"></div>
+    <div id="analysisStats" class="stats hidden" style="margin-top:10px">
+      <div class="stat"><div class="label">Duration</div><div class="value" id="statDuration">—</div></div>
+      <div class="stat"><div class="label">BPM (approx)</div><div class="value" id="statBpm">—</div></div>
+      <div class="stat"><div class="label">Beats</div><div class="value" id="statBeats">—</div></div>
+      <div class="stat"><div class="label">Drops</div><div class="value" id="statDrops">—</div></div>
+    </div>
+    <div class="small">⚠ Beat detection is approximate (energy-peak analysis). Not studio-grade AI.</div>
+  </div>
+
+  <!-- STEP 2: VIDEO CLIPS -->
+  <div class="card">
+    <h2>2 · Add Video Clips</h2>
+    <div class="tabs" id="clipTabs">
+      <button class="tab active" data-tab="upload">📤 My Uploads</button>
+      <button class="tab" data-tab="stock">🎬 Stock Footage</button>
+    </div>
+
+    <div id="tabUpload">
+      <div class="upload-zone" id="videoZone">
+        <div class="icon">🎥</div>
+        <div class="text"><b>Tap to upload video clips</b><br/>MP4, MOV, WEBM (multiple allowed)</div>
+        <input type="file" id="videoInput" accept="video/*" multiple style="display:none"/>
+      </div>
+      <div id="clipList" class="clip-list" style="margin-top:12px"></div>
+    </div>
+
+    <div id="tabStock" class="hidden">
+      <div class="status warn show" style="margin-bottom:10px">
+        🔑 Pixabay API key is stored in your browser only. Anyone visiting this page can view it via DevTools. For production, use a backend proxy.
+      </div>
+      <label>Pixabay API Key</label>
+      <input type="password" class="input" id="pixabayKey" placeholder="Enter your Pixabay API key"/>
+      <div class="small">Get a free key at <a href="https://pixabay.com/api/docs/" target="_blank" style="color:var(--gold)">pixabay.com/api/docs</a></div>
+
+      <label style="margin-top:10px">Category</label>
+      <div class="tabs" id="categoryTabs">
+        <button class="tab active" data-cat="cars">🏎 Cars</button>
+        <button class="tab" data-cat="cinematic people">🎭 Cinematic People</button>
+        <button class="tab" data-cat="sports">⚽ Sports</button>
+        <button class="tab" data-cat="nature">🌿 Nature</button>
+      </div>
+
+      <label>Keyword (optional)</label>
+      <input type="text" class="input" id="stockQuery" placeholder="e.g. sunset, racing, dance"/>
+
+      <button class="btn btn-block" id="searchStockBtn" style="margin-top:10px">🔎 Search Stock Videos</button>
+      <div id="stockStatus" class="status"></div>
+      <div id="stockGrid" class="grid" style="margin-top:12px"></div>
+    </div>
+  </div>
+
+  <!-- STEP 3: EDITING MODE -->
+  <div class="card">
+    <h2>3 · Editing Mode</h2>
+    <label>Auto-Edit Style</label>
+    <select class="select" id="editMode">
+      <option value="every">🎯 Every Beat — cut on every detected beat</option>
+      <option value="strong">💥 Strong Beats — cut only on strong/bass beats</option>
+      <option value="fast">⚡ Fast Cuts — rapid cuts, high energy</option>
+      <option value="cinematic">🎬 Cinematic — slower, dramatic cuts</option>
+    </select>
+
+    <label style="margin-top:10px">Effects Mix</label>
+    <select class="select" id="effectsMix">
+      <option value="balanced">Balanced (recommended)</option>
+      <option value="subtle">Subtle</option>
+      <option value="intense">Intense</option>
+      <option value="none">No effects</option>
+    </select>
+
+    <label style="margin-top:10px">Output Resolution</label>
+    <select class="select" id="resolution">
+      <option value="1080">1080 × 1920 (Full HD — 9:16)</option>
+      <option value="720">720 × 1280 (Lower — better for weaker phones)</option>
+      <option value="540">540 × 960 (Low — fastest)</option>
+    </select>
+
+    <button class="btn btn-block" id="generateBtn" style="margin-top:12px" disabled>✨ Generate Auto Edit</button>
+    <div id="generateStatus" class="status"></div>
+  </div>
+
+  <!-- STEP 4: PREVIEW & TIMELINE -->
+  <div class="card">
+    <h2>4 · Preview</h2>
+    <div class="preview-wrap" id="previewWrap">
+      <canvas id="previewCanvas"></canvas>
+      <div class="preview-overlay" id="previewOverlay">Generate an edit to see preview</div>
+    </div>
+    <div class="row" style="margin-top:10px">
+      <button class="btn" id="playPauseBtn" disabled>▶ Play</button>
+      <button class="btn btn-ghost" id="regenBtn" disabled>🔄 Regenerate</button>
+    </div>
+
+    <label style="margin-top:12px">Timeline</label>
+    <div class="timeline" id="timeline">
+      <div class="timeline-track" id="timelineTrack"></div>
+    </div>
+    <div class="small" id="timelineInfo">—</div>
+  </div>
+
+  <!-- STEP 5: EXPORT -->
+  <div class="card">
+    <h2>5 · Export</h2>
+    <button class="btn btn-block" id="exportBtn" disabled>📥 Export Video</button>
+    <div id="exportStatus" class="status"></div>
+    <div class="progress hidden" id="exportProgress"><div class="progress-bar" id="exportBar"></div></div>
+    <div id="exportDownload" class="hidden" style="margin-top:10px">
+      <a class="btn btn-block" id="downloadLink" download="beatcut-video.webm">⬇ Download Video</a>
+    </div>
+    <div class="small">
+      ⚠ Exported as <b>WebM</b> (not MP4) — this is what mobile browsers support via MediaRecorder.
+      For MP4 you'd need FFmpeg.wasm (heavy) or a server. WebM plays in most modern players and can be converted later.
+    </div>
+  </div>
+
+  <!-- RESET -->
+  <button class="btn btn-danger btn-block" id="resetBtn">🗑 Reset Project</button>
+
+  <div class="small" style="text-align:center;margin-top:20px;color:var(--text-dim)">
+    BeatCut Studio · Browser-based editor · Works offline after first load
+  </div>
+</div>
+
+<!-- STOCK VIDEO MODAL -->
+<div class="modal-bg" id="stockModal">
+  <div class="modal">
+    <h3 id="stockModalTitle">Stock Video</h3>
+    <video id="stockModalVideo" controls style="width:100%;border-radius:8px;background:#000"></video>
+    <div class="small" id="stockModalInfo"></div>
+    <div class="row" style="margin-top:12px">
+      <a class="btn btn-ghost" id="stockModalOpen" target="_blank">🔗 Open on Pixabay</a>
+      <a class="btn" id="stockModalDownload" target="_blank">⬇ Download</a>
+    </div>
+    <div class="small warn" style="color:#f4d03f;margin-top:8px">
+      📌 After downloading, come back to "My Uploads" tab and upload the file to add it to your edit.
+    </div>
+    <button class="btn btn-block btn-ghost" id="stockModalClose" style="margin-top:10px">Close</button>
+  </div>
+</div>
+
+<script>
+/* =========================================================
+   BEATCUT STUDIO — Core Application
+   ========================================================= */
+
+const $ = (id) => document.getElementById(id);
+const state = {
+  audioFile: null,
+  audioBuffer: null,
+  audioUrl: null,
+  analysis: null, // { duration, bpm, beats:[t], strongBeats:[t], drops:[t], energy }
+  clips: [],      // { id, file, url, videoEl, name, duration, width, height }
+  timeline: [],   // { clipId, start, duration, effects:{} }
+  totalDuration: 0,
+  isPlaying: false,
+  playStart: 0,
+  playOffset: 0,
+  animFrame: null,
+  recordedBlob: null,
+};
+
+const canvas = $('previewCanvas');
+const ctx = canvas.getContext('2d');
+function setCanvasSize(){
+  const res = parseInt($('resolution').value);
+  canvas.width = res;
+  canvas.height = Math.round(res * 16/9);
+}
+setCanvasSize();
+
+/* ---------- UI HELPERS ---------- */
+function showStatus(el, type, msg){
+  el.className = 'status show ' + type;
+  el.textContent = msg;
+}
+function clearStatus(el){ el.className='status'; el.textContent=''; }
+
+/* ---------- TAB SWITCHING ---------- */
+document.querySelectorAll('#clipTabs .tab').forEach(t=>{
+  t.onclick = () => {
+    document.querySelectorAll('#clipTabs .tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active');
+    const tab = t.dataset.tab;
+    $('tabUpload').classList.toggle('hidden', tab!=='upload');
+    $('tabStock').classList.toggle('hidden', tab!=='stock');
+  };
+});
+let currentCategory = 'cars';
+document.querySelectorAll('#categoryTabs .tab').forEach(t=>{
+  t.onclick = () => {
+    document.querySelectorAll('#categoryTabs .tab').forEach(x=>x.classList.remove('active'));
+    t.classList.
