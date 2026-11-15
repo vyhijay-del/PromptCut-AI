@@ -1,0 +1,597 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#090b14">
+  <meta name="application-name" content="PromptCut AI">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 64 64%27%3E%3Cdefs%3E%3ClinearGradient id=%27g%27 x1=%270%27 y1=%270%27 x2=%271%27 y2=%271%27%3E%3Cstop stop-color=%27%23a98aff%27/%3E%3Cstop offset=%271%27 stop-color=%27%234dd7dc%27/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width=%2764%27 height=%2764%27 rx=%2718%27 fill=%27%230e1322%27/%3E%3Cpath d=%27M15 23a5 5 0 0 1 5-5h5l4-5h8l4 5h3a5 5 0 0 1 5 5v20a5 5 0 0 1-5 5H20a5 5 0 0 1-5-5z%27 fill=%27none%27 stroke=%27url(%23g)%27 stroke-width=%274%27/%3E%3Ccircle cx=%2732%27 cy=%2733%27 r=%2710%27 fill=%27none%27 stroke=%27url(%23g)%27 stroke-width=%274%27/%3E%3Cpath d=%27m29 27 10 6-10 6z%27 fill=%27%23fff%27/%3E%3C/svg%3E">
+  <title>PromptCut AI — Beat-Sync Video Editor</title>
+  <style>
+:root{--bg:#090b14;--panel:#111522;--panel2:#151b2b;--line:#252c40;--text:#f4f6ff;--muted:#929bb2;--purple:#8b72ff;--cyan:#52d9df;--green:#66e0b0}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 75% -15%,#25204a 0,transparent 38%),var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;min-height:100vh}.app-shell{display:flex;min-height:100vh}.sidebar{width:220px;padding:28px 18px;border-right:1px solid #20263a;display:flex;flex-direction:column;flex-shrink:0;background:#0b0e18}.brand{display:flex;align-items:center;gap:11px;font-family:'Space Grotesk';font-size:19px}.brand small{display:block;color:#8f8aa9;font-size:9px;letter-spacing:2px;margin-top:1px}.brand-mark{width:40px;height:40px;flex:0 0 40px;border-radius:13px;background:linear-gradient(135deg,#a98aff,#4dd7dc);display:grid;place-items:center;box-shadow:0 7px 22px #806bff45,inset 0 1px 0 #ffffff70;position:relative;overflow:hidden}.brand-mark svg{width:29px;height:29px;filter:drop-shadow(0 2px 3px #080b1580)}.brand b{letter-spacing:-.5px}.brand small{font-weight:800;color:#8f8aa9;font-size:8px;letter-spacing:2.3px;margin-top:3px}.side-label,.eyebrow{font-size:10px;letter-spacing:1.8px;color:#8c94ab;font-weight:700}.side-label{margin:48px 0 13px 10px}.nav{border:0;background:transparent;color:#aab1c5;text-align:left;padding:12px;border-radius:10px;margin-bottom:5px;font:600 13px 'DM Sans';cursor:pointer}.nav span{margin-right:12px}.nav.active{background:#211d3c;color:#c8bdff}.sidebar-bottom{margin-top:auto;color:#7e89a2;font-size:11px;display:flex;align-items:center;gap:8px;padding:10px}.status-dot,.local-pill i{width:7px;height:7px;border-radius:50%;background:#62dcae;display:inline-block;box-shadow:0 0 12px #62dcae}
+.main{width:min(1180px,100%);margin:auto;padding:30px 38px 20px}.topbar,.top-actions,.panel-head,.action-row,.results-heading,.progress-label,.dialog-head{display:flex;align-items:center;justify-content:space-between}.topbar{margin-bottom:22px}.topbar h1{font:600 26px 'Space Grotesk';margin:5px 0 0}.top-actions{gap:12px}.local-pill{font-size:11px;color:#a8b3c9;border:1px solid var(--line);padding:8px 11px;border-radius:30px}.local-pill i{margin-right:6px}.btn{border:0;border-radius:10px;padding:11px 15px;font:700 12px 'DM Sans';cursor:pointer;transition:.2s}.btn:hover{transform:translateY(-1px);filter:brightness(1.1)}.btn-ghost{background:#171c2b;color:#b7bfd2}.btn-primary{background:linear-gradient(100deg,#9577ff,#5b9dff);color:white;box-shadow:0 8px 24px #765eff30}.btn-outline{background:#171c2b;border:1px solid #343b55;color:#d9dded}.hero-strip{padding:26px 30px;border:1px solid #38305f;border-radius:18px;background:linear-gradient(105deg,#1b1940,#161b30 65%,#122c3b);display:flex;justify-content:space-between;align-items:center;margin-bottom:18px;overflow:hidden}.hero-kicker{font-size:9px;letter-spacing:1.8px;color:#b3a8ff;font-weight:700}.hero-strip h2{font:600 clamp(23px,3vw,32px) 'Space Grotesk';margin:8px 0}.hero-strip h2 em{font-style:normal;color:#a99aff}.hero-strip p{color:#abb3c9;font-size:12px;margin:0;max-width:570px}.hero-icon{font-size:78px;color:#a38aff;opacity:.65;text-shadow:0 0 35px #8b72ff}
+.upload-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}.panel{background:linear-gradient(145deg,#121725,#101421);border:1px solid var(--line);border-radius:15px;padding:18px;margin-bottom:16px;box-shadow:0 12px 30px #00000015}.panel-head{margin-bottom:14px}.panel-head>div{display:flex;align-items:center;gap:10px}.panel-head h3{font:600 15px 'Space Grotesk';margin:0}.step{font-size:10px;color:#a99aff;background:#292346;border-radius:6px;padding:5px 7px}.hint{font-size:10px;color:#77829c}.dropzone{height:142px;border:1px dashed #414965;border-radius:12px;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:7px;background:#151b2a;cursor:pointer;transition:.2s}.dropzone:hover,.dropzone.drag{border-color:#9b82ff;background:#1b1b35}.dropzone input{display:none}.upload-icon{width:34px;height:34px;border-radius:10px;background:#282347;color:#b7a9ff;display:grid;place-items:center;font-size:21px}.dropzone b{font-size:12px}.dropzone small{font-size:10px;color:#8994ad}.audio-tools{display:flex;gap:18px;margin-top:13px;flex-wrap:wrap}.check{font-size:11px;color:#aeb8ce;display:flex;gap:7px;align-items:center}.check input{accent-color:#9577ff}.clip-list{max-height:75px;overflow:auto;margin-top:10px}.empty-clips{color:#65718a;font-size:10px;text-align:center;padding:8px}.clip-item{font-size:10px;color:#c2c9d9;padding:5px 8px;background:#1a2030;border-radius:6px;margin:4px 0;display:flex;justify-content:space-between}.clip-item span:last-child{color:#7f8aa4}
+.settings-panel{margin-top:16px}.settings-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:13px}.field{font-size:10px;color:#9ca7bf;display:flex;flex-direction:column;gap:7px}.field.wide{grid-column:span 3}textarea,select{width:100%;background:#0c111d;border:1px solid #2c354b;color:#e5e9f6;border-radius:9px;padding:11px 12px;font:11px 'DM Sans';outline:none;resize:vertical}textarea:focus,select:focus{border-color:#8e78f7}select{height:38px}.action-row{margin-top:17px;gap:12px}.privacy-note{font-size:10px;color:#78859d}.progress-wrap{margin-top:17px}.progress-label{font-size:10px;color:#aeb8cc;margin-bottom:7px}.progress{height:5px;border-radius:9px;background:#252c3e;overflow:hidden}.progress i{display:block;height:100%;width:0;background:linear-gradient(90deg,#8f72ff,#51d6dc);transition:width .15s}
+.results{margin-top:27px}.results-heading{margin-bottom:14px}.results-heading h2{font:600 22px 'Space Grotesk';margin:5px 0}.metrics{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:16px}.metric{background:#151a2a;border:1px solid #292f45;border-radius:11px;padding:13px}.metric b{display:block;font:600 20px 'Space Grotesk';color:#c5b8ff}.metric small{font-size:9px;color:#8994ad}.waveform-panel canvas{width:100%;height:120px;display:block;background:#0d1220;border-radius:9px}.legend{display:flex;gap:17px;margin-top:10px;color:#8e9ab2;font-size:9px}.legend i{display:inline-block;width:7px;height:7px;border-radius:2px;margin-right:5px}.legend-a{background:#7f75e9}.legend-b{background:#55d8d0}.master-panel textarea{line-height:1.6;color:#d6dcef}.mini-btn{background:#282344;color:#c9bdff;border:1px solid #443a70;border-radius:7px;padding:6px 10px;font-size:10px;cursor:pointer}.scene-list{display:grid;gap:9px}.scene-card{border:1px solid #293149;background:#151b2a;border-radius:10px;padding:12px}.scene-top{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.scene-time{font:600 11px 'Space Grotesk';color:#a99aff}.scene-tags{display:flex;gap:5px;flex-wrap:wrap}.tag{font-size:9px;padding:4px 6px;border-radius:5px;background:#25233e;color:#bdb2ff}.scene-card p{font-size:11px;line-height:1.6;color:#c2cadd;margin:0}.scene-card button{margin-top:9px}.bottom-note{font-size:10px;line-height:1.6;color:#8792a9;padding:12px 3px}footer{text-align:center;color:#59647d;font-size:9px;padding:20px}footer span{padding:0 6px;color:#8c78ef}
+dialog{background:#151a29;color:#eef0fa;border:1px solid #39415b;border-radius:15px;padding:22px;max-width:450px}dialog::backdrop{background:#03050acc;backdrop-filter:blur(4px)}.dialog-head button{background:none;border:0;color:white;font-size:22px;cursor:pointer}.dialog-head h3{font:600 18px 'Space Grotesk'}.dialog p{font-size:12px;line-height:1.7;color:#b4bfd3}
+@media(max-width:850px){.sidebar{width:65px;padding:20px 9px}.brand>div:last-child,.side-label,.nav:not(.active),.nav.active{font-size:0}.brand{justify-content:center}.brand-mark{flex-shrink:0}.nav.active{font-size:0;text-align:center}.nav.active span{font-size:17px;margin:0}.sidebar-bottom span{display:none}.main{padding:24px 20px}.settings-grid{grid-template-columns:1fr 1fr}.field.wide{grid-column:span 2}}
+@media(max-width:600px){.sidebar{display:none}.main{padding:18px 13px}.topbar h1{font-size:21px}.local-pill{display:none}.hero-strip{padding:20px}.hero-icon{font-size:48px}.upload-grid{grid-template-columns:1fr;gap:0}.panel{padding:14px}.settings-grid{grid-template-columns:1fr}.field.wide{grid-column:span 1}.action-row{align-items:stretch;flex-direction:column}.btn-primary{width:100%}.privacy-note{text-align:center}.metrics{grid-template-columns:1fr 1fr}.results-heading{align-items:flex-end}.results-heading h2{font-size:19px}.hint{font-size:9px}.top-actions{gap:5px}.btn-ghost{padding:9px}.scene-top{align-items:flex-start;flex-direction:column}}
+
+.render-panel{margin-top:18px}.render-grid{display:grid;grid-template-columns:minmax(180px,300px) 1fr;gap:20px;align-items:start}.preview-wrap{position:relative;background:#080b13;border:1px solid #303951;border-radius:12px;overflow:hidden;max-width:300px;margin:auto;width:100%}.preview-wrap canvas{display:block;width:100%;height:auto;max-height:480px;object-fit:contain}.preview-caption{position:absolute;bottom:8px;left:8px;background:#080b13cc;color:#b8c2d8;border-radius:5px;padding:5px 7px;font-size:8px;letter-spacing:1px}.render-controls{display:grid;gap:12px}.render-controls .field small{font-size:9px;color:#78859d;font-weight:400}.render-info{font-size:10px;line-height:1.6;color:#9ba8c0;background:#171d2d;border:1px solid #2b344b;padding:10px;border-radius:8px}.download-link{display:block;text-align:center;text-decoration:none}.render-disclaimer{font-size:9px;line-height:1.6;color:#7e8aa2;margin:12px 0 0}@media(max-width:650px){.render-grid{grid-template-columns:1fr}.preview-wrap{max-width:230px}.render-controls{width:100%}}
+
+.edit-mode-box{border:1px solid #303951;background:#0f1422;border-radius:12px;padding:14px}.mode-heading{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-bottom:10px;font-size:11px;color:#e7eaff}.mode-options{display:grid;grid-template-columns:1fr 1fr;gap:10px}.mode-card{display:flex;align-items:flex-start;gap:10px;padding:12px;border:1px solid #303951;border-radius:10px;background:#151b2a;cursor:pointer}.mode-card:has(input:checked){border-color:#927bff;background:#211d3c;box-shadow:0 0 0 1px #927bff33}.mode-card input{accent-color:#9577ff;margin-top:3px}.mode-icon{font-size:22px;color:#b9aaff}.mode-card b{display:block;font-size:11px;color:#f0efff;margin-bottom:4px}.mode-card small{display:block;font-size:9px;line-height:1.5;color:#9ba7bf}.cutout-options{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:13px;padding-top:13px;border-top:1px solid #293149}.cutout-note{grid-column:1/-1;font-size:9px;line-height:1.6;color:#e0bd83;background:#2b2419;border:1px solid #54442b;border-radius:8px;padding:9px;margin:0}.cutout-options[hidden]{display:none}@media(max-width:600px){.mode-options{grid-template-columns:1fr}.cutout-options{grid-template-columns:1fr}.mode-heading{align-items:flex-start;flex-direction:column}}
+
+
+.motion-controls{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:13px;border:1px solid #343b55;border-radius:11px;background:linear-gradient(145deg,#171b30,#101522)}
+.motion-title{grid-column:1/-1;font:700 10px 'Space Grotesk',sans-serif;letter-spacing:1.1px;color:#b9a8ff}
+.motion-controls .field{min-width:0}.motion-controls output{float:right;color:#64dce0;font-weight:700}.motion-controls input[type=range]{width:100%;accent-color:#9a82ff;margin-top:9px}
+@media(max-width:600px){.motion-controls{grid-template-columns:1fr}.motion-title{grid-column:1}}
+
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand" aria-label="PromptCut AI Studio logo"><div class="brand-mark"><svg viewBox="0 0 48 48" role="img" aria-label="PromptCut camera play logo"><path d="M6.5 17.5a4 4 0 0 1 4-4h5l3.2-4h10.6l3.2 4h5a4 4 0 0 1 4 4v19a4 4 0 0 1-4 4h-27a4 4 0 0 1-4-4z" fill="none" stroke="#101426" stroke-width="3.2" stroke-linejoin="round"/><circle cx="24" cy="27" r="9" fill="none" stroke="#101426" stroke-width="3.2"/><path d="m22 22 8 5-8 5z" fill="#fff"/><path d="m37 8 1.5 3.5L42 13l-3.5 1.5L37 18l-1.5-3.5L32 13l3.5-1.5z" fill="#fff"/></svg></div><div><b>PromptCut</b><small>AI STUDIO</small></div></div>
+      <div class="side-label">WORKSPACE</div>
+      <button class="nav active"><span>◫</span> Editor</button>
+      <button class="nav" id="howBtn"><span>⌘</span> How it works</button>
+      <div class="sidebar-bottom"><div class="status-dot"></div><span>Local processing enabled</span></div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow">CREATIVE WORKSPACE</div><h1>Auto Video Editor</h1></div>
+        <div class="top-actions"><span class="local-pill"><i></i> Browser-based</span><button class="btn btn-ghost" id="resetBtn">Reset project</button></div>
+      </header>
+
+      <section class="hero-strip">
+        <div><div class="hero-kicker">YOUR AUDIO. YOUR CLIPS. ONE SMART EDIT.</div><h2>Turn the rhythm into a <em>story.</em></h2><p>Analyze beats, map scenes and generate a master prompt plus shot-by-shot editing instructions.</p></div>
+        <div class="hero-icon">♫</div>
+      </section>
+
+      <section class="upload-grid">
+        <article class="panel upload-panel">
+          <div class="panel-head"><div><span class="step">01</span><h3>Audio source</h3></div><span class="hint">MP3 · WAV · M4A · OGG</span></div>
+          <label class="dropzone audio-drop" for="audioInput" id="audioDrop">
+            <input id="audioInput" type="file" accept="audio/*">
+            <span class="upload-icon">♫</span><b id="audioName">Drop audio or browse files</b><small id="audioMeta">Voice-over, music or both</small>
+          </label>
+          <div class="audio-tools">
+            <label class="check"><input type="checkbox" id="voiceMode" checked> Voice + background music</label>
+            <label class="check"><input type="checkbox" id="musicMode"> Music only</label>
+          </div>
+          <audio id="audioPlayer" controls hidden></audio>
+        </article>
+
+        <article class="panel upload-panel">
+          <div class="panel-head"><div><span class="step">02</span><h3>Video clips</h3></div><span class="hint">MP4 · MOV · WEBM</span></div>
+          <label class="dropzone video-drop" for="videoInput" id="videoDrop">
+            <input id="videoInput" type="file" accept="video/*" multiple>
+            <span class="upload-icon">▣</span><b>Drop clips or browse files</b><small id="clipCount">Add one or more source clips</small>
+          </label>
+          <div id="clipList" class="clip-list"><div class="empty-clips">Your clips will appear here</div></div>
+        </article>
+      </section>
+
+      <section class="panel settings-panel">
+        <div class="panel-head"><div><span class="step">03</span><h3>Editing direction</h3></div><span class="hint">Optional, but recommended</span></div>
+        <div class="settings-grid">
+          <label class="field wide">Describe the style you want
+            <textarea id="stylePrompt" rows="2" placeholder="Example: Roblox story, cinematic camera moves, expressive character moments, bright daytime city scenes, dramatic but smooth transitions..."></textarea>
+          </label>
+          <label class="field">Video format
+            <select id="aspect"><option value="9:16">9:16 — Reels / Shorts</option><option value="16:9">16:9 — YouTube</option><option value="1:1">1:1 — Square</option></select>
+          </label>
+          <label class="field">Editing intensity
+            <select id="intensity"><option value="balanced">Balanced</option><option value="energetic">High energy</option><option value="cinematic">Cinematic</option><option value="minimal">Minimal</option></select>
+          </label>
+          <label class="field">Export target
+            <select id="quality"><option value="1080">1080p Full HD</option><option value="720">720p HD</option><option value="540">540p — lighter device</option></select>
+          </label>
+          <div class="edit-mode-box wide">
+            <div class="mode-heading"><b>Choose edit mode</b><span class="hint">Switch anytime before generating prompts</span></div>
+            <div class="mode-options">
+              <label class="mode-card"><input type="radio" name="editMode" value="normal" checked><span class="mode-icon">✂</span><span><b>Normal Edit</b><small>Story-focused cuts, transitions, camera moves and beat sync.</small></span></label>
+              <label class="mode-card"><input type="radio" name="editMode" value="cutout"><span class="mode-icon">◉</span><span><b>Subject Cutout Edit</b><small>Isolate and highlight the main subject with a cutout-style look.</small></span></label>
+            </div>
+            <div class="cutout-options" id="cutoutOptions" hidden>
+              <label class="field">Subject to isolate
+                <select id="subjectType"><option value="auto">Auto — match video topic</option><option value="human">Human / character</option><option value="car">Car / vehicle</option><option value="animal">Animal / creature</option><option value="object">Main object / product</option></select>
+              </label>
+              <label class="field">Video topic / story context
+                <input id="videoTopic" type="text" placeholder="e.g. Roblox city chase, car racing, hero story...">
+              </label>
+              <label class="field">Cutout look
+                <select id="cutoutLook"><option value="clean">Clean sharp cutout</option><option value="glow">Neon outline + glow</option><option value="cinematic">Cinematic rim light + shadow</option><option value="pop">Bold pop-out / 3D depth</option></select>
+              </label>
+              <p class="cutout-note">Cutout mode generates detailed AI editing instructions. Actual pixel-level subject removal and tracking need a connected segmentation/video AI engine; the current local WebM renderer does not perform that masking yet.</p>
+            </div>
+          </div>
+        </div>
+        <div class="action-row"><div class="privacy-note">✦ Audio analysis runs locally in your browser. Files are not uploaded.</div><button class="btn btn-primary" id="analyzeBtn"><span>✦</span> Analyze audio & generate prompts</button></div>
+        <div class="progress-wrap" id="progressWrap" hidden><div class="progress-label"><span id="progressText">Preparing analysis…</span><span id="progressPct">0%</span></div><div class="progress"><i id="progressBar"></i></div></div>
+      </section>
+
+      <section class="results" id="results" hidden>
+        <div class="results-heading"><div><div class="eyebrow">ANALYSIS COMPLETE</div><h2>Your edit blueprint</h2></div><button class="btn btn-outline" id="copyAllBtn">Copy all prompts</button></div>
+        <div class="metrics" id="metrics"></div>
+        <article class="panel waveform-panel">
+          <div class="panel-head"><div><span class="step">04</span><h3>Beat map</h3></div><span class="hint">Detected energy peaks</span></div>
+          <canvas id="waveCanvas" height="120"></canvas>
+          <div class="legend"><span><i class="legend-a"></i> Audio energy</span><span><i class="legend-b"></i> Suggested edit points</span></div>
+        </article>
+        <article class="panel master-panel">
+          <div class="panel-head"><div><span class="step">05</span><h3>Master editing prompt</h3></div><button class="mini-btn" data-copy="masterPrompt">Copy</button></div>
+          <textarea id="masterPrompt" rows="7" readonly></textarea>
+        </article>
+        <article class="panel scene-panel">
+          <div class="panel-head"><div><span class="step">06</span><h3>Scene-wise prompts</h3></div><span class="hint" id="sceneCount">0 scenes</span></div>
+          <div id="scenePrompts" class="scene-list"></div>
+        </article>
+        <div class="bottom-note">These are generated editing instructions based on audio energy and timing. For semantic story understanding, visual clip recognition and one-click rendered export, connect an AI/backend editing engine.</div>
+      </section>
+
+      <section class="panel render-panel" id="renderPanel" hidden>
+        <div class="panel-head"><div><span class="step">07</span><h3>Render your video</h3></div><span class="hint">Browser-based export</span></div>
+        <div class="render-grid">
+          <div class="preview-wrap"><canvas id="previewCanvas" width="720" height="1280"></canvas><div class="preview-caption">LIVE RENDER PREVIEW</div></div>
+          <div class="render-controls">
+            <label class="field">Caption script <small>Optional · separate sentences with a new line</small>
+              <textarea id="captionScript" rows="4" placeholder="Paste your voice-over transcript here. Separate sentences with a new line."></textarea>
+            </label>
+            <label class="field">Timed subtitles <small>Optional · upload .SRT or .VTT for accurate caption timing</small>
+              <input id="subtitleInput" type="file" accept=".srt,.vtt,text/vtt,application/x-subrip">
+            </label>
+            <label class="check"><input type="checkbox" id="burnCaptions" checked> Burn captions into video</label>
+            <label class="check"><input type="checkbox" id="useBeatCuts" checked> Use detected beat accents for clip cuts</label>
+            <div class="motion-controls">
+              <div class="motion-title">✦ TRANSITIONS & CAMERA MOVEMENT</div>
+              <label class="field">Transition effect
+                <select id="transitionEffect"><option value="fade">Smooth Fade</option><option value="flash">Beat Flash</option><option value="zoom">Zoom Burst</option><option value="wipe">Directional Wipe</option><option value="glitch">Glitch Pop</option><option value="spin">Spin Transition</option><option value="none">No Transition</option></select>
+              </label>
+              <label class="field">Camera movement
+                <select id="cameraMove"><option value="push">Cinematic Push In</option><option value="pull">Pull Out</option><option value="pan">Dynamic Pan</option><option value="orbit">Orbit / 3D Feel</option><option value="handheld">Smooth Handheld</option><option value="static">Static Camera</option></select>
+              </label>
+              <label class="field">Rotation <output id="rotationValue">3°</output>
+                <input type="range" id="rotationAmount" min="0" max="18" value="3" step="1">
+              </label>
+              <label class="field">Motion intensity <output id="motionValue">65%</output>
+                <input type="range" id="motionIntensity" min="0" max="100" value="65" step="5">
+              </label>
+            </div>
+            <div class="render-info" id="renderInfo">Add at least one video clip and analyze audio to enable rendering.</div>
+            <button class="btn btn-primary" id="renderBtn" disabled>▶ Render video</button>
+            <div class="progress-wrap" id="renderProgressWrap" hidden><div class="progress-label"><span id="renderProgressText">Preparing render…</span><span id="renderProgressPct">0%</span></div><div class="progress"><i id="renderProgressBar"></i></div></div>
+            <a class="btn btn-outline download-link" id="downloadRender" hidden download="promptcut-export.webm">Download rendered video</a>
+          </div>
+        </div>
+        <p class="render-disclaimer">Exports WebM in supported browsers. This browser renderer performs clip sequencing, beat-aware cuts, selectable transitions, animated camera movement, rotation, audio muxing and optional text overlays. It does not yet perform AI subject segmentation/cutout, automatic speech recognition or native MP4 encoding.</p>
+      </section>
+      <footer>PromptCut AI <span>•</span> Single-file Studio v0.4 <span>•</span> Built for creators</footer>
+    </main>
+  </div>
+
+  <dialog id="helpDialog"><div class="dialog-head"><h3>How PromptCut works</h3><button id="closeHelp">×</button></div><p>1. Add an audio track and your video clips.</p><p>2. Choose Voice + Music or Music Only, then describe the visual style.</p><p>3. PromptCut measures audio energy, estimates beat-like peaks and creates a master prompt plus timed scene instructions.</p><p><b>Prototype note:</b> Browser-side beat detection is an estimate, not a studio-grade beat tracker. This version generates the edit plan; it renders a WebM video with selectable transitions, camera movement and rotation. It does not understand clip contents with a vision model.</p></dialog>
+  <script>
+(() => {
+  'use strict';
+  const $ = (id) => document.getElementById(id);
+  const state = { audioFile: null, clips: [], audioUrl: null, peaks: [], duration: 0, bpm: null, beatTimes: [] };
+  const audioInput = $('audioInput'), videoInput = $('videoInput');
+  const audioPlayer = $('audioPlayer');
+
+  function fmtTime(s) {
+    if (!Number.isFinite(s)) return '0:00';
+    const m = Math.floor(s / 60), sec = Math.floor(s % 60);
+    return `${m}:${String(sec).padStart(2,'0')}`;
+  }
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function setProgress(p, label) {
+    $('progressWrap').hidden = false;
+    $('progressBar').style.width = `${p}%`;
+    $('progressPct').textContent = `${Math.round(p)}%`;
+    $('progressText').textContent = label;
+  }
+  function addDropHandlers(zone, input, multiple) {
+    ['dragenter','dragover'].forEach(ev => zone.addEventListener(ev, e => {e.preventDefault();zone.classList.add('drag');}));
+    ['dragleave','drop'].forEach(ev => zone.addEventListener(ev, e => {e.preventDefault();zone.classList.remove('drag');}));
+    zone.addEventListener('drop', e => {
+      const files = [...(e.dataTransfer?.files || [])].filter(f => multiple ? f.type.startsWith('video/') : f.type.startsWith('audio/'));
+      if (files.length) {
+        const dt = new DataTransfer(); files.forEach(f => dt.items.add(f)); input.files = dt.files;
+        input.dispatchEvent(new Event('change'));
+      }
+    });
+  }
+  addDropHandlers($('audioDrop'), audioInput, false);
+  addDropHandlers($('videoDrop'), videoInput, true);
+
+  audioInput.addEventListener('change', () => {
+    const file = audioInput.files?.[0]; if (!file) return;
+    if (state.audioUrl) URL.revokeObjectURL(state.audioUrl);
+    state.audioFile = file; state.audioUrl = URL.createObjectURL(file);
+    audioPlayer.src = state.audioUrl; audioPlayer.hidden = false;
+    $('audioName').textContent = file.name;
+    $('audioMeta').textContent = `${(file.size/1048576).toFixed(1)} MB · ${file.type || 'Audio file'}`;
+  });
+  videoInput.addEventListener('change', () => {
+    state.clips = [...(videoInput.files || [])];
+    $('clipCount').textContent = `${state.clips.length} clip${state.clips.length===1?'':'s'} selected`;
+    $('clipList').innerHTML = state.clips.length ? state.clips.map((f,i)=>`<div class="clip-item"><span>${i+1}. ${escapeHtml(f.name)}</span><span>${(f.size/1048576).toFixed(1)} MB</span></div>`).join('') : '<div class="empty-clips">Your clips will appear here</div>';
+  });
+
+  function analyzeBuffer(buffer) {
+    const data = buffer.getChannelData(0);
+    const sampleRate = buffer.sampleRate;
+    const windowSize = 1024, hop = 512;
+    const energies = [];
+    for (let start=0; start<data.length; start+=hop) {
+      let sum=0, count=0;
+      const end=Math.min(start+windowSize,data.length);
+      for(let i=start;i<end;i+=4){sum+=data[i]*data[i];count++;}
+      energies.push(Math.sqrt(sum/Math.max(1,count)));
+    }
+    // Smooth energy envelope and calculate positive spectral-like energy changes.
+    const smooth = energies.map((v,i,a)=>{
+      let total=0,n=0; for(let j=Math.max(0,i-2);j<=Math.min(a.length-1,i+2);j++){total+=a[j];n++;}
+      return total/n;
+    });
+    const novelty = smooth.map((v,i)=>Math.max(0,v-(smooth[i-3]||0)));
+    const sorted=[...novelty].sort((a,b)=>a-b);
+    const threshold=sorted[Math.floor(sorted.length*.82)] || 0;
+    const minGap=Math.max(1,Math.round((sampleRate/hop)*.22));
+    const candidates=[];
+    for(let i=2;i<novelty.length-2;i++){
+      if(novelty[i]>=threshold && novelty[i]>=novelty[i-1] && novelty[i]>=novelty[i+1]) candidates.push({i,v:novelty[i]});
+    }
+    const selected=[];
+    for(const p of candidates.sort((a,b)=>b.v-a.v)){
+      if(selected.every(q=>Math.abs(q.i-p.i)>=minGap)) selected.push(p);
+    }
+    selected.sort((a,b)=>a.i-b.i);
+    const beatTimes=selected.map(p=>p.i*hop/sampleRate).filter(t=>t<buffer.duration);
+    // Estimate BPM from intervals in plausible range.
+    const intervals=[];
+    for(let i=1;i<beatTimes.length;i++){
+      const d=beatTimes[i]-beatTimes[i-1]; if(d>=.28&&d<=1.2) intervals.push(d);
+    }
+    let bpm=null;
+    if(intervals.length){
+      const median=intervals.sort((a,b)=>a-b)[Math.floor(intervals.length/2)];
+      bpm=Math.round(60/median);
+      while(bpm<70)bpm*=2; while(bpm>180)bpm=Math.round(bpm/2);
+    }
+    const max=Math.max(...smooth,0.00001);
+    return {energies:smooth.map(v=>v/max),beatTimes,bpm,duration:buffer.duration};
+  }
+
+  function describeMoment(t, index, total, peaks, duration) {
+    const local = peaks.filter(x=>Math.abs(x-t)<1.8).length;
+    if (index===0) return 'Open with a clear establishing shot; use a gentle push-in and let the first visual read cleanly.';
+    if (local>=3) return 'High-energy section: make a decisive cut on the detected accent, add a short punch-in or impact shake, then settle quickly.';
+    if (index%5===0) return 'Create a visual reset with a new angle or location; use a smooth match cut and controlled camera movement.';
+    if (index%3===0) return 'Emphasize the current action with a brief speed ramp or close-up, timed to the rhythm without obscuring the story.';
+    return 'Cut or change camera framing on this rhythmic accent; use a subtle zoom and a clean transition that preserves continuity.';
+  }
+  function makePrompts(a) {
+    const style=$('stylePrompt').value.trim() || 'polished cinematic storytelling with clear subject focus';
+    const mode=$('musicMode').checked && !$('voiceMode').checked ? 'Music-only edit' : 'Voice-over plus background music edit';
+    const intensity=$('intensity').value;
+    const aspect=$('aspect').value, quality=$('quality').value;
+    const editMode=document.querySelector('input[name="editMode"]:checked')?.value || 'normal';
+    const subjectType=$('subjectType')?.value || 'auto';
+    const topic=$('videoTopic')?.value.trim() || 'infer the subject and story from the supplied video topic and footage';
+    const look=$('cutoutLook')?.value || 'clean';
+    const subjectNames={auto:'the most story-relevant main subject, selected from the video topic and visible action',human:'the main human or character, including hair, face, hands and clothing edges',car:'the primary car or vehicle, including mirrors, wheels, windows and body contours',animal:'the main animal or creature, preserving fur, feathers, ears and fine edges',object:'the main object or product, preserving its complete silhouette and fine details'};
+    const lookNames={clean:'clean, precise subject edges with natural feathering',glow:'a tasteful neon outline and controlled outer glow',cinematic:'cinematic rim lighting, realistic contact shadow and depth separation',pop:'bold pop-out 3D depth with a subtle foreground separation'};
+    const cutoutBrief=editMode==='cutout'?`\n\nSUBJECT CUTOUT DIRECTION: Create a subject-isolation edit around ${subjectNames[subjectType]}. Story/topic: ${topic}. Visual treatment: ${lookNames[look]}. Keep the isolated subject sharp and readable, track it consistently through movement and occlusion, preserve fine edges, avoid flicker/halo artifacts, and separate it from a softened, darkened or context-appropriate replaced background. Use subject-following motion, selective zooms and parallax only when they support the story. Never cut away from the subject during an important action or spoken line. If the selected subject is not visible in a shot, use a relevant available shot rather than inventing a cutout.`:'';
+    const energy=intensity==='energetic'?'fast, punchy and dynamic':intensity==='cinematic'?'controlled, cinematic and emotionally paced':intensity==='minimal'?'minimal, clean and restrained':'balanced with a mix of energetic cuts and breathing room';
+    const clipText=state.clips.length ? `${state.clips.length} uploaded source clip(s). Select the most relevant available footage for each moment; do not invent footage that is not present.` : 'No source clips have been attached yet; use placeholders until footage is supplied.';
+    const master=`Create a ${aspect} ${quality}p ${mode.toLowerCase()} using the supplied audio as the timing source. Edit mode: ${editMode==='cutout'?'Subject Cutout Edit':'Normal Edit'}. Overall style: ${style}. Editing pace: ${energy}. ${clipText}\n\nSynchronize important cuts and visual accents to detected rhythmic peaks, especially strong transients and bass accents. Do not cut mechanically on every beat: preserve dialogue, pauses, story clarity and meaningful action. Use scene changes when the audio energy or narrative moment justifies them. Add smooth transitions, purposeful camera push-ins, occasional controlled shake on strong impacts, readable animated captions for spoken words, and consistent color treatment. Keep faces and important action unobstructed. Maintain continuity between shots, avoid repetitive effects, and finish on a satisfying final visual.${cutoutBrief}\n\nExport target: ${quality}p, ${aspect}.`;
+    const times=a.beatTimes;
+    const step= Math.max(1,Math.ceil(times.length/28));
+    const chosen=times.filter((_,i)=>i%step===0).slice(0,28);
+    if(!chosen.length) chosen.push(0);
+    const scenes=chosen.map((t,i)=>{
+      const next=chosen[i+1] ?? Math.min(a.duration,t+3.5);
+      const nearby=a.beatTimes.filter(x=>x>=t&&x<next);
+      const action=describeMoment(t,i,chosen.length,a.beatTimes,a.duration);
+      const cutoutScene=editMode==='cutout'?` Keep ${subjectNames[subjectType]} as the visual hero for this moment. Apply ${lookNames[look]}; maintain frame-to-frame subject tracking, clean edges and background separation. Topic context: ${topic}.` : '';
+      const prompt=`${action} ${nearby.length>1?'There are multiple rhythmic accents in this section; use one primary cut and reserve smaller accents for motion or caption emphasis.':'Use the detected audio accent as the edit anchor.'} ${style}. ${state.clips.length?'Choose the closest matching uploaded clip and trim to the strongest action.':'Insert the best-matching footage for this moment when clips are added.'} ${$('musicMode').checked?'Let the music drive the visual rhythm.':'Keep spoken words intelligible; place captions on key phrases and avoid cutting mid-word.'}${cutoutScene}`;
+      return {start:t,end:Math.max(t+.5,next),prompt,tag:nearby.length>1?'Energy cluster':'Beat accent'};
+    });
+    return {master,scenes};
+  }
+  function drawWave(a) {
+    const canvas=$('waveCanvas'), rect=canvas.getBoundingClientRect(), dpr=Math.min(window.devicePixelRatio||1,2);
+    canvas.width=Math.max(1,Math.floor(rect.width*dpr)); canvas.height=120*dpr;
+    const ctx=canvas.getContext('2d'); ctx.scale(dpr,dpr);
+    const w=rect.width,h=120; ctx.clearRect(0,0,w,h);
+    const values=a.energies, step=Math.max(1,Math.floor(values.length/w));
+    for(let x=0;x<w;x++){
+      const v=values[Math.min(values.length-1,x*step)]||0;
+      const bar=Math.max(2,v*78);
+      ctx.fillStyle='rgba(137,119,255,.78)'; ctx.fillRect(x,h/2-bar/2,1.5,bar);
+    }
+    a.beatTimes.forEach(t=>{
+      const x=(t/a.duration)*w;ctx.fillStyle='#55d8d0';ctx.fillRect(x,8,1.5,h-16);
+    });
+  }
+  function renderResults(a) {
+    const avg=a.energies.reduce((s,v)=>s+v,0)/Math.max(1,a.energies.length);
+    $('metrics').innerHTML=[
+      [a.bpm?`${a.bpm} BPM`:'— BPM','Estimated tempo'],
+      [String(a.beatTimes.length),'Detected accents'],
+      [fmtTime(a.duration),'Audio duration'],
+      [`${Math.round(avg*100)}%`,'Average energy']
+    ].map(([v,l])=>`<div class="metric"><b>${v}</b><small>${l}</small></div>`).join('');
+    const result=makePrompts(a); $('masterPrompt').value=result.master;
+    $('sceneCount').textContent=`${result.scenes.length} timed prompts`;
+    $('scenePrompts').innerHTML=result.scenes.map((s,i)=>`<div class="scene-card"><div class="scene-top"><span class="scene-time">SCENE ${String(i+1).padStart(2,'0')} · ${fmtTime(s.start)} – ${fmtTime(s.end)}</span><div class="scene-tags"><span class="tag">${s.tag}</span><span class="tag">${$('intensity').value}</span></div></div><p>${escapeHtml(s.prompt)}</p><button class="mini-btn" data-scene="${i}">Copy scene prompt</button></div>`).join('');
+    $('results').hidden=false; drawWave(a); window.scrollTo({top:$('results').offsetTop-20,behavior:'smooth'});
+    $('scenePrompts').querySelectorAll('[data-scene]').forEach(btn=>btn.addEventListener('click',()=>copyText(result.scenes[Number(btn.dataset.scene)].prompt,btn)));
+    $('copyAllBtn').onclick=()=>copyText(result.master+'\n\n'+result.scenes.map((s,i)=>`Scene ${i+1} (${fmtTime(s.start)}-${fmtTime(s.end)}): ${s.prompt}`).join('\n\n'),$('copyAllBtn'));
+  }
+  async function runAnalysis() {
+    if(!state.audioFile){alert('Please upload an audio file first.');return;}
+    const btn=$('analyzeBtn');btn.disabled=true;btn.textContent='Analyzing…';
+    try{
+      setProgress(8,'Reading audio file');
+      const bytes=await state.audioFile.arrayBuffer();
+      setProgress(25,'Decoding audio');
+      const Ctx=window.AudioContext||window.webkitAudioContext;
+      if(!Ctx) throw new Error('Web Audio API is not supported in this browser.');
+      const ctx=new Ctx();
+      const buffer=await ctx.decodeAudioData(bytes.slice(0));
+      setProgress(58,'Detecting rhythm and energy peaks');
+      await new Promise(r=>setTimeout(r,30));
+      const a=analyzeBuffer(buffer);
+      state.peaks=a.energies;state.duration=a.duration;state.bpm=a.bpm;state.beatTimes=a.beatTimes;
+      setProgress(82,'Generating master and scene prompts');
+      await new Promise(r=>setTimeout(r,40));
+      renderResults(a);
+      setProgress(100,'Prompts generated successfully');
+      await ctx.close();
+    }catch(err){console.error(err);alert(`Could not analyze this audio: ${err.message}`);$('progressWrap').hidden=true;}
+    finally{btn.disabled=false;btn.innerHTML='<span>✦</span> Analyze audio & generate prompts';}
+  }
+  async function copyText(text,button){
+    try{await navigator.clipboard.writeText(text);const old=button.textContent;button.textContent='Copied ✓';setTimeout(()=>button.textContent=old,1300);}
+    catch{alert('Clipboard access was blocked. Select and copy the prompt manually.');}
+  }
+  const cutoutOptions=$('cutoutOptions');
+  document.querySelectorAll('input[name="editMode"]').forEach(input=>input.addEventListener('change',()=>{
+    cutoutOptions.hidden=document.querySelector('input[name="editMode"]:checked')?.value!=='cutout';
+  }));
+  $('analyzeBtn').addEventListener('click',runAnalysis);
+  document.querySelectorAll('[data-copy]').forEach(b=>b.addEventListener('click',()=>copyText($(b.dataset.copy).value,b)));
+  $('resetBtn').addEventListener('click',()=>{
+    if(state.audioUrl)URL.revokeObjectURL(state.audioUrl);
+    state.audioFile=null;state.clips=[];state.audioUrl=null;state.peaks=[];state.beatTimes=[];
+    audioInput.value='';videoInput.value='';audioPlayer.removeAttribute('src');audioPlayer.hidden=true;
+    $('audioName').textContent='Drop audio or browse files';$('audioMeta').textContent='Voice-over, music or both';
+    $('clipCount').textContent='Add one or more source clips';$('clipList').innerHTML='<div class="empty-clips">Your clips will appear here</div>';
+    $('results').hidden=true;$('progressWrap').hidden=true;
+  });
+  $('howBtn').addEventListener('click',()=>$('helpDialog').showModal());
+  $('closeHelp').addEventListener('click',()=>$('helpDialog').close());
+  window.addEventListener('resize',()=>{if(!$('results').hidden&&state.energies)drawWave({energies:state.peaks,beatTimes:state.beatTimes,duration:state.duration});});
+
+  // Browser-side video renderer: canvas video frames + captured audio stream.
+  const renderPanel=$('renderPanel'), renderBtn=$('renderBtn'), previewCanvas=$('previewCanvas');
+  let renderBusy=false, renderedUrl=null;
+  function updateRenderAvailability(){
+    const ready=!!state.audioFile && state.clips.length>0 && state.duration>0;
+    renderBtn.disabled=!ready || renderBusy;
+    $('renderInfo').textContent=ready
+      ? `${state.clips.length} clip(s) · ${fmtTime(state.duration)} audio · ${$('quality').value}p target. Export: WebM.${document.querySelector('input[name="editMode"]:checked')?.value==='cutout'?' Cutout instructions are in the prompts; this renderer exports the original footage without AI masking.':''}`
+      : 'Add at least one video clip and analyze audio to enable rendering.';
+  }
+  const originalRenderResults=renderResults;
+  renderResults=function(a){ originalRenderResults(a); renderPanel.hidden=false; updateRenderAvailability(); };
+  const originalAudioChange=audioInput.onchange;
+  audioInput.addEventListener('change',updateRenderAvailability);
+  videoInput.addEventListener('change',updateRenderAvailability);
+  $('quality').addEventListener('change',updateRenderAvailability);
+
+  function loadVideoFile(file){
+    return new Promise((resolve,reject)=>{
+      const v=document.createElement('video');v.preload='auto';v.muted=true;v.playsInline=true;
+      v.src=URL.createObjectURL(file);
+      const done=()=>resolve({video:v,url:v.src,duration:v.duration||0});
+      v.addEventListener('loadedmetadata',done,{once:true});
+      v.addEventListener('error',()=>reject(new Error(`Could not read clip: ${file.name}`)),{once:true});
+      v.load();
+    });
+  }
+  function fitCanvas(canvas,aspect,quality){
+    const q=Number(quality), dims=aspect==='9:16'?[Math.round(q*9/16),q]:aspect==='1:1'?[q,q]:[q,Math.round(q*9/16*16/9)];
+    canvas.width=dims[0];canvas.height=dims[1];return dims;
+  }
+  function drawFrame(ctx,canvas,video,caption,fade=1,motion={}){
+    const w=canvas.width,h=canvas.height;
+    ctx.fillStyle='#080a12';ctx.fillRect(0,0,w,h);
+    if(video && video.readyState>=2){
+      const base=Math.max(w/video.videoWidth,h/video.videoHeight)*1.12;
+      const progress=Math.max(0,Math.min(1,motion.progress||0));
+      const power=(Number($('motionIntensity')?.value||65)/100);
+      const amount=Number($('rotationAmount')?.value||3)*Math.PI/180;
+      const mode=$('cameraMove')?.value||'push';
+      let zoom=1,panX=0,panY=0,angle=0;
+      if(mode==='push')zoom=1+(.12*power*progress);
+      if(mode==='pull')zoom=1+(.12*power*(1-progress));
+      if(mode==='pan'){zoom=1.13;panX=(progress-.5)*w*.16*power;panY=Math.sin(progress*Math.PI)*h*.025*power;}
+      if(mode==='orbit'){zoom=1.16;panX=Math.sin(progress*Math.PI*2)*w*.045*power;panY=Math.cos(progress*Math.PI*2)*h*.025*power;angle=Math.sin(progress*Math.PI*2)*amount*power*2;}
+      if(mode==='handheld'){zoom=1.12+Math.sin(progress*17)*.012*power;panX=Math.sin(progress*23)*w*.009*power;panY=Math.cos(progress*19)*h*.009*power;angle=Math.sin(progress*15)*amount*.45*power;}
+      angle+=Math.sin(progress*Math.PI*2)*amount*power*.35;
+      const dw=video.videoWidth*base*zoom,dh=video.videoHeight*base*zoom;
+      ctx.save();ctx.globalAlpha=fade;ctx.translate(w/2+panX,h/2+panY);ctx.rotate(angle);ctx.drawImage(video,-dw/2,-dh/2,dw,dh);ctx.restore();
+    }else{
+      ctx.fillStyle='#171a31';ctx.fillRect(0,0,w,h);ctx.fillStyle='#fff';ctx.textAlign='center';ctx.font=`bold ${Math.round(w*.045)}px sans-serif`;ctx.fillText('PROMPTCUT AI',w/2,h/2);
+    }
+    if(caption && $('burnCaptions').checked){
+      const font=Math.max(18,Math.round(w*.045)),maxWidth=w*.86,words=caption.split(/\s+/),lines=[];let line='';
+      ctx.font=`700 ${font}px sans-serif`;
+      for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>maxWidth&&line){lines.push(line);line=word;}else line=test;}
+      if(line)lines.push(line);
+      const lineH=font*1.25,pad=font*.55,y=h*.82-(lines.length-1)*lineH/2;
+      ctx.fillStyle='rgba(0,0,0,.62)';ctx.fillRect(w*.06,y-font*.85,w*.88,lines.length*lineH+pad);
+      ctx.fillStyle='#fff';ctx.textAlign='center';ctx.textBaseline='middle';
+      lines.forEach((t,i)=>{ctx.shadowColor='#000';ctx.shadowBlur=3;ctx.fillText(t,w/2,y+i*lineH,maxWidth);});ctx.shadowBlur=0;
+    }
+  }
+  function paintTransition(ctx,canvas,progress,type,segmentIndex){
+    if(type==='none'||progress>=1)return;
+    const w=canvas.width,h=canvas.height,p=Math.max(0,Math.min(1,progress));
+    const alpha=1-p;
+    ctx.save();
+    if(type==='fade'){
+      ctx.fillStyle=`rgba(0,0,0,${alpha*.9})`;ctx.fillRect(0,0,w,h);
+    }else if(type==='flash'){
+      ctx.fillStyle=`rgba(255,255,255,${alpha*.88})`;ctx.fillRect(0,0,w,h);
+    }else if(type==='zoom'){
+      ctx.fillStyle=`rgba(10,8,30,${alpha*.48})`;ctx.fillRect(0,0,w,h);
+      ctx.strokeStyle=`rgba(180,160,255,${alpha*.9})`;ctx.lineWidth=Math.max(2,w*.012);
+      const r=(1-p)*Math.max(w,h)*.72;ctx.beginPath();ctx.arc(w/2,h/2,r,0,Math.PI*2);ctx.stroke();
+    }else if(type==='wipe'){
+      ctx.fillStyle='#080a12';const x=(segmentIndex%2===0?1-p:p)*w;
+      ctx.fillRect(segmentIndex%2===0?0:x,0,segmentIndex%2===0?x:w-x,h);
+    }else if(type==='glitch'){
+      for(let i=0;i<7;i++){const y=((i*137+segmentIndex*71)%h);ctx.fillStyle=i%2?`rgba(82,217,223,${alpha*.45})`:`rgba(139,114,255,${alpha*.5})`;ctx.fillRect((i%3)*w*.04,y,w*(.35+((i*7)%5)*.1),Math.max(3,h*.009));}
+      ctx.fillStyle=`rgba(255,255,255,${alpha*.12})`;ctx.fillRect(0,0,w,h);
+    }else if(type==='spin'){
+      ctx.translate(w/2,h/2);ctx.rotate((1-p)*Math.PI*.75);ctx.scale(1+(1-p)*.18,1+(1-p)*.18);ctx.strokeStyle=`rgba(150,125,255,${alpha*.9})`;ctx.lineWidth=Math.max(3,w*.018);ctx.strokeRect(-w*.42,-h*.42,w*.84,h*.84);
+      ctx.fillStyle=`rgba(5,7,18,${alpha*.32})`;ctx.fillRect(-w,-h,w*2,h*2);
+    }
+    ctx.restore();
+  }
+
+  function makeSegments(duration,clipCount,beats,useBeats){
+    const bounds=[0];
+    for(let i=1;i<clipCount;i++){
+      const target=duration*i/clipCount;
+      let chosen=target;
+      if(useBeats&&beats.length){let nearest=beats.reduce((best,t)=>Math.abs(t-target)<Math.abs(best-target)?t:best,beats[0]);if(Math.abs(nearest-target)<Math.min(1.2,duration/clipCount*.45))chosen=nearest;}
+      chosen=Math.max(bounds[bounds.length-1]+.35,Math.min(duration-.35,chosen));bounds.push(chosen);
+    }
+    bounds.push(duration);
+    return bounds.slice(0,-1).map((start,i)=>({start,end:bounds[i+1],clipIndex:i%clipCount}));
+  }
+
+  function parseSubtitleTime(value){
+    const m=value.trim().match(/(?:(\d+):)?(\d{2}):(\d{2})[,.](\d{3})/);
+    if(!m)return null;
+    return (Number(m[1]||0)*3600)+(Number(m[2])*60)+Number(m[3])+(Number(m[4])/1000);
+  }
+  function parseSubtitleFile(text){
+    const blocks=text.replace(/\r/g,'').split(/\n{2,}/);const cues=[];
+    for(const block of blocks){
+      const lines=block.split('\n').map(x=>x.trim()).filter(Boolean);
+      const timeLine=lines.find(x=>x.includes('-->'));if(!timeLine)continue;
+      const parts=timeLine.split('-->');const start=parseSubtitleTime(parts[0]),end=parseSubtitleTime(parts[1].split(/\s+/)[0]);
+      const idx=lines.indexOf(timeLine);const caption=lines.slice(idx+1).join(' ').replace(/<[^>]*>/g,'').trim();
+      if(start!==null&&end!==null&&end>start&&caption)cues.push({start,end,text:caption});
+    }
+    return cues.sort((a,b)=>a.start-b.start);
+  }
+  async function renderVideo(){
+    if(renderBusy)return;
+    if(!window.MediaRecorder||!HTMLCanvasElement.prototype.captureStream){alert('Video recording is not supported in this browser. Try the latest Chrome or Edge.');return;}
+    renderBusy=true;updateRenderAvailability();$('downloadRender').hidden=true;
+    const ctx2d=previewCanvas.getContext('2d');let loaded=[],raf=0,recorder=null,audioCtx=null,source=null,started=false;
+    try{
+      const quality=$('quality').value,aspect=$('aspect').value;
+      fitCanvas(previewCanvas,aspect,quality);
+      setProgress(3,'Loading video clips');
+      for(let i=0;i<state.clips.length;i++){loaded.push(await loadVideoFile(state.clips[i]));setProgress(3+Math.round((i+1)/state.clips.length*15),'Loading video clips');}
+      const valid=loaded.filter(x=>x.duration>0);
+      if(!valid.length)throw new Error('No playable video clips were found.');
+      const segments=makeSegments(state.duration,valid.length,state.beatTimes,$('useBeatCuts').checked);
+      const captionLines=$('captionScript').value.split(/\n+/).map(x=>x.trim()).filter(Boolean);
+      let captions=captionLines.map((text,i)=>({start:state.duration*i/Math.max(1,captionLines.length),end:state.duration*(i+1)/Math.max(1,captionLines.length),text}));
+      const subtitleFile=$('subtitleInput').files?.[0];
+      if(subtitleFile){
+        const subtitleText=await subtitleFile.text();
+        const timed=parseSubtitleFile(subtitleText);
+        if(!timed.length)throw new Error('The subtitle file has no valid SRT/VTT cues.');
+        captions=timed;
+      }
+      const canvasStream=previewCanvas.captureStream(30);
+      const audioEl=$('audioPlayer');audioEl.pause();audioEl.currentTime=0;
+      const captureAudio=audioEl.captureStream||audioEl.mozCaptureStream;
+      if(!captureAudio)throw new Error('Audio capture is not supported here. Use the latest Chrome or Edge.');
+      const audioStream=captureAudio.call(audioEl);
+      const audioTracks=audioStream.getAudioTracks();
+      if(!audioTracks.length)throw new Error('No audio track could be captured from the uploaded audio.');
+      const combined=new MediaStream([...canvasStream.getVideoTracks(),...audioTracks]);
+      const mimeTypes=['video/webm;codecs=vp9,opus','video/webm;codecs=vp8,opus','video/webm'];
+      const mime=mimeTypes.find(t=>MediaRecorder.isTypeSupported(t))||'';
+      recorder=new MediaRecorder(combined,mime?{mimeType:mime,videoBitsPerSecond:quality==='1080'?6500000:quality==='720'?3500000:1800000}:undefined);
+      const chunks=[];
+      recorder.ondataavailable=e=>{if(e.data&&e.data.size)chunks.push(e.data);};
+      const stopped=new Promise(resolve=>recorder.onstop=resolve);
+      const startedAt=performance.now();
+      let lastClip=-1;
+      function frame(){
+        const elapsed=Math.min(state.duration,(performance.now()-startedAt)/1000);
+        const seg=segments.find(x=>elapsed>=x.start&&elapsed<x.end)||segments[segments.length-1];
+        const clip=valid[seg.clipIndex],v=clip.video;
+        if(seg.clipIndex!==lastClip){
+          valid.forEach((item,i)=>{if(i!==seg.clipIndex)item.video.pause();});
+          lastClip=seg.clipIndex;
+        }
+        const target=Math.min(Math.max(0,elapsed-seg.start),Math.max(0,clip.duration-.05));
+        if(Math.abs(v.currentTime-target)>.35){try{v.currentTime=target;}catch{}}
+        if(v.paused)v.play().catch(()=>{});
+        const caption=captions.find(c=>elapsed>=c.start&&elapsed<c.end)?.text||'';
+        const segmentProgress=Math.max(0,Math.min(1,(elapsed-seg.start)/Math.max(.1,seg.end-seg.start)));
+        const fadeIn=Math.min(1,(elapsed-seg.start)/.12);
+        drawFrame(ctx2d,previewCanvas,v,caption,fadeIn,{progress:segmentProgress});
+        const transitionDuration=.62;
+        const transitionProgress=Math.min(1,Math.max(0,(elapsed-seg.start)/transitionDuration));
+        if(seg.start>0)paintTransition(ctx2d,previewCanvas,transitionProgress,$('transitionEffect').value,seg.clipIndex);
+        const pct=Math.min(99,Math.round(elapsed/state.duration*100));
+        $('renderProgressBar').style.width=pct+'%';$('renderProgressPct').textContent=pct+'%';$('renderProgressText').textContent=`Rendering ${fmtTime(elapsed)} / ${fmtTime(state.duration)}`;
+        if(elapsed<state.duration&&!audioEl.paused)raf=requestAnimationFrame(frame);
+        else if(recorder.state==='recording')recorder.stop();
+      }
+      drawFrame(ctx2d,previewCanvas,valid[0].video,'',1);
+      setProgress(20,'Starting audio and video recording');$('renderProgressWrap').hidden=false;
+      recorder.start(500);started=true;
+      await audioEl.play();
+      raf=requestAnimationFrame(frame);
+      audioEl.onended=()=>{if(recorder&&recorder.state==='recording')recorder.stop();};
+      await stopped;
+      cancelAnimationFrame(raf);audioEl.onended=null;audioEl.pause();
+      valid.forEach(x=>x.video.pause());
+      const blob=new Blob(chunks,{type:recorder.mimeType||'video/webm'});
+      if(!blob.size)throw new Error('The browser returned an empty video. Please retry in Chrome.');
+      if(renderedUrl)URL.revokeObjectURL(renderedUrl);
+      renderedUrl=URL.createObjectURL(blob);
+      const link=$('downloadRender');link.href=renderedUrl;link.download=`promptcut-${Date.now()}.webm`;link.hidden=false;
+      $('renderProgressBar').style.width='100%';$('renderProgressPct').textContent='100%';$('renderProgressText').textContent=`Export ready · ${(blob.size/1048576).toFixed(1)} MB`;
+      setProgress(100,'Video exported successfully');
+    }catch(err){
+      console.error(err);alert(`Render failed: ${err.message}`);
+    }finally{
+      cancelAnimationFrame(raf);
+      if(started&&recorder&&recorder.state==='recording')recorder.stop();
+      $('audioPlayer').pause();
+
+      loaded.forEach(x=>{x.video.pause();URL.revokeObjectURL(x.url);});
+      renderBusy=false;updateRenderAvailability();
+    }
+  }
+  $('rotationAmount').addEventListener('input',e=>$('rotationValue').textContent=`${e.target.value}°`);
+  $('motionIntensity').addEventListener('input',e=>$('motionValue').textContent=`${e.target.value}%`);
+  renderBtn.addEventListener('click',renderVideo);
+  updateRenderAvailability();
+
+})();
+  </script>
+</body>
+</html>
